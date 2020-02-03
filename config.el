@@ -42,33 +42,18 @@
 
 (after! org (setq org-capture-templates
                   '(("g" "Getting things done")
-                    ("r" "References")
-                    ("d" "Diary")
-                    ("p" "Graph Data")
+                    ("w" "Workplace")
                     ("n" "Notes" entry (file+headline "~/org/gtd/notes.org" "Inbox") "* %u %?\n%i\n%a" :prepend t))))
 
 (after! org (add-to-list 'org-capture-templates
-                         '("gr" "Recurring Task" entry (file "~/org/gtd/recurring.org")
-                           "* TODO %^{description}
-:PROPERTIES:
-:CREATED:    %U
-:END:
-:RESOURCES:
-:END:
-+ NOTES:
-  %?")))
-
-(after! org (add-to-list 'org-capture-templates
              '("gp" "Project" entry (file+headline"~/org/gtd/tasks.org" "Projects")
-"* TODO %^{Description}
+"* TODO %^{Project}
 :PROPERTIES:
 :SUBJECT: %^{subject}
 :GOAL:    %^{goal}
 :END:
 :RESOURCES:
 :END:
-+ REQUIREMENTS:
-  %^{requirements}
 + NOTES:
   %?
 \** TODO %^{task1}")))
@@ -85,34 +70,11 @@
   - [ ] %^{next steps}
 + NOTES:")))
 
-(after! org (add-to-list 'org-capture-templates
-             '("re" "Yank new Example" entry(file+headline"~/org/notes/examples.org" "INBOX")
-"* %^{example}
-:PROPERTIES:
-:SOURCE:  %^{source|Command|Script|Code|Usage}
-:SUBJECT: %^{subject}
-:END:
-\#+BEGIN_SRC %^{lang}
-%x
-\#+END_SRC
-%?")))
 
 (after! org (add-to-list 'org-capture-templates
-             '("rn" "Yank new Example" entry(file+headline"~/org/notes/references.org" "INBOX")
-"* %^{example}
+             '("d" "New Diary Entry" entry(file+olp+datetree"~/org/diary.org" "Daily Logs")
+"* %^{Summarize in one sentence}
 :PROPERTIES:
-:CATEGORY: %^{category}
-:SUBJECT:  %^{subject}
-:END:
-:RESOURCES:
-:END:
-%?")))
-
-(after! org (add-to-list 'org-capture-templates
-             '("dn" "New Diary Entry" entry(file+olp+datetree"~/org/diary.org" "Daily Logs")
-"* %^{thought for the day}
-:PROPERTIES:
-:CATEGORY: %^{category}
 :SUBJECT:  %^{subject}
 :MOOD:     %^{mood}
 :END:
@@ -124,6 +86,35 @@
 - %^{onethingdobetter}
 \*Describe in your own words how your day was*:
 - %?")))
+
+(after! org (add-to-list 'org-capture-templates
+                         '("wn" "Work notes" entry(file+olp+datetree"~/org/work.org" "Notes" )
+"* %^{What?} %^g
+:PROPERTIES:
+:CREATED: %U
+:END:
+%?
+")))
+
+(after! org (add-to-list 'org-capture-templates
+                         '("wa" "Work Agendas" entry(file+olp+datetree"~/org/work.org" "Agendas")
+"* %^{What?} %^g
+:PROPERTIES:
+:CREATED: %U
+:PERSON: %^{For whom?}
+:END:
+%?
+")))
+
+(after! org (add-to-list 'org-capture-templates
+                         '("wd" "Work Deadlines" entry(file+olp+datetree"~/org/work.org" "Deadlines")
+"* %^{What?} %^g
+:PROPERTIES:
+:END:
+%?
+"
+:time-prompt t
+)))
 
 (after! org (setq org-directory "~/org/"
                   org-image-actual-width nil
@@ -257,9 +248,6 @@
                                        '((:name "[[~/org/gtd/habits.org][Habits]]"
                                                 :habit t
                                                 :order 1)
-                                         (:name "[[~/org/gtd/recurring.org][Bills]]"
-                                                :tag "@bills"
-                                                :order 4)
                                          (:name "Today's Schedule"
                                                 :time-grid t
                                                 :scheduled t
@@ -275,24 +263,12 @@
                                        (:name "NEXT UP"
                                               :todo "NEXT"
                                               :order 2)
-                                       (:name "Emacs Reading"
-                                              :and (:category "Emacs" :tag "@read")
-                                              :order 3)
-                                       (:name "Emacs Config"
-                                              :and (:category "Emacs" :tag "@configure")
-                                              :order 4)
-                                       (:name "Emacs Misc"
-                                              :category "Emacs"
-                                              :order 5)
-                                       (:name "Task Reading"
-                                              :and (:category "Tasks" :tag "@read")
-                                              :order 6)
                                        (:name "Task Other"
                                               :category "Tasks"
-                                              :order 7)
+                                              :order 3)
                                        (:name "Projects"
                                               :category "Projects"
-                                              :order 8)))))
+                                              :order 4)))))
                              (todo "DELEGATED"
                                    ((org-agenda-overriding-header "Delegated Tasks by WHO")
                                     (org-agenda-files '("~/org/gtd/tasks.org"))
