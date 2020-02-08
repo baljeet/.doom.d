@@ -41,35 +41,22 @@
                   (find-lisp-find-files "~/org/" "\.org$")))
 
 (after! org (setq org-capture-templates
-                  '(("g" "Getting things done")
-                    ("w" "Workplace")
-                    ("n" "Notes" entry (file+headline "~/org/gtd/notes.org" "Inbox") "* %u %?\n%i\n%a" :prepend t))))
+                  '(("n" "Notes" entry (file+headline "~/org/gtd/notes.org" "Inbox") "* %u %?\n%i\n%a" :prepend t))))
+
+
 
 (after! org (add-to-list 'org-capture-templates
-             '("gp" "Project" entry (file+headline"~/org/gtd/tasks.org" "Projects")
-"* TODO %^{Project}
-:PROPERTIES:
-:SUBJECT: %^{subject}
-:GOAL:    %^{goal}
-:END:
-:RESOURCES:
-:END:
-+ NOTES:
-  %?
-\** TODO %^{task1}")))
-
-(after! org (add-to-list 'org-capture-templates
-             '("gt" "Capture Task" entry (file"~/org/gtd/inbox.org")
+             '("h" "Track Habit" entry (file"~/org/habits.org")
 "** TODO %?
 :PROPERTIES:
 :CREATED:    %U
+:STYLE: habit
 :END:
 :RESOURCES:
 :END:
-+ NEXT STEPS:
-  - [ ] %^{next steps}
-+ NOTES:")))
-
+"
+:time-prompt t
+)))
 
 (after! org (add-to-list 'org-capture-templates
              '("d" "New Diary Entry" entry(file+olp+datetree"~/org/diary.org" "Daily Logs")
@@ -86,35 +73,6 @@
 - %^{onethingdobetter}
 \*Describe in your own words how your day was*:
 - %?")))
-
-(after! org (add-to-list 'org-capture-templates
-                         '("wn" "Work notes" entry(file+olp+datetree"~/org/work.org" "Notes" )
-"* %^{What?} %^g
-:PROPERTIES:
-:CREATED: %U
-:END:
-%?
-")))
-
-(after! org (add-to-list 'org-capture-templates
-                         '("wa" "Work Agendas" entry(file+olp+datetree"~/org/work.org" "Agendas")
-"* %^{What?} %^g
-:PROPERTIES:
-:CREATED: %U
-:PERSON: %^{For whom?}
-:END:
-%?
-")))
-
-(after! org (add-to-list 'org-capture-templates
-                         '("wd" "Work Deadlines" entry(file+olp+datetree"~/org/work.org" "Deadlines")
-"* %^{What?} %^g
-:PROPERTIES:
-:END:
-%?
-"
-:time-prompt t
-)))
 
 (after! org (setq org-directory "~/org/"
                   org-image-actual-width nil
@@ -235,62 +193,6 @@
   (org-clock-goto))
 (provide 'org-clock-switch)
 
-(org-super-agenda-mode t)
-(after! org-agenda (setq org-agenda-custom-commands
-                         '(("t" "Tasks"
-                            ((agenda ""
-                                     ((org-agenda-files '("~/org/gtd/tasks.org" "~/org/gtd/tickler.org" "~/org/gtd/projects.org"))
-                                      (org-agenda-overriding-header "What's on my calendar")
-                                      (org-agenda-span 'day)
-                                      (org-agenda-start-day (org-today))
-                                      (org-agenda-current-span 'day)
-                                      (org-super-agenda-groups
-                                       '((:name "[[~/org/gtd/habits.org][Habits]]"
-                                                :habit t
-                                                :order 1)
-                                         (:name "Today's Schedule"
-                                                :time-grid t
-                                                :scheduled t
-                                                :deadline t
-                                                :order 13)))))
-                             (todo "TODO|NEXT|REVIEW|WAITING|IN-PROGRESS"
-                                   ((org-agenda-overriding-header "[[~/org/gtd/tasks.org][Task list]]")
-                                    (org-agenda-files '("~/org/gtd/tasks.org"))
-                                    (org-super-agenda-groups
-                                     '((:name "CRITICAL"
-                                              :priority "A"
-                                              :order 1)
-                                       (:name "NEXT UP"
-                                              :todo "NEXT"
-                                              :order 2)
-                                       (:name "Task Other"
-                                              :category "Tasks"
-                                              :order 3)
-                                       (:name "Projects"
-                                              :category "Projects"
-                                              :order 4)))))
-                             (todo "DELEGATED"
-                                   ((org-agenda-overriding-header "Delegated Tasks by WHO")
-                                    (org-agenda-files '("~/org/gtd/tasks.org"))
-                                    (org-super-agenda-groups
-                                     '((:auto-property "WHO")))))
-                             (todo ""
-                                   ((org-agenda-overriding-header "References")
-                                    (org-agenda-files '("~/org/gtd/references.org"))
-                                    (org-super-agenda-groups
-                                     '((:auto-ts t)))))))
-                           ("i" "Inbox"
-                            ((todo ""
-                                   ((org-agenda-files '("~/org/gtd/inbox.org"))
-                                    (org-agenda-overriding-header "Items in my inbox")
-                                    (org-super-agenda-groups
-                                     '((:auto-ts t)))))))
-                           ("x" "Get to someday"
-                            ((todo ""
-                                        ((org-agenda-overriding-header "Projects marked Someday")
-                                         (org-agenda-files '("~/org/gtd/someday.org"))
-                                         (org-super-agenda-groups
-                                          '((:auto-ts t))))))))))
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
 ;; - `load!' for loading external *.el files relative to this one
